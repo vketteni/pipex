@@ -52,14 +52,6 @@ dup2(pipefd[1], STDOUT_FILENO);
 ```
 dup2(pipefd[1], STDOUT_FILENO);
 ```
-## access
-```
-if (access("file.txt", F_OK) == -1) {
-    // File does not exist, handle error
-}
-```
-*The F_OK flag is used to check for the existence of the file. 
-You can also use other flags like R_OK, W_OK, and X_OK to check for read, write, and execute permissions, respectively.*
 ## execve
 ```
 char *cmd[] = {"/bin/ls", "-l", NULL}; // Command to execute
@@ -72,7 +64,27 @@ if (fork() == 0) {
 }
 // Parent process continues here
 ```
+In this snippet, execve is used in the child process to execute the ls -l command. The first argument is the path to the executable, the second is an array of arguments (including the command itself), and the third is an array of environment variables. If execve is successful, it doesn't return; if it returns, it indicates an error.
 
+
+## Obtain environment variables
+To obtain environment variables for use with execve, you can pass the current environment received by your program. In C, this is typically done by using the third parameter of the main function, which is an array of strings representing the environment variables. This parameter is conventionally named envp.
+```
+int main(int argc, char *argv[], char *envp[]) {
+    // Your code here
+    execve(command, command_args, envp);
+    // More code
+}
+
+```
+## access
+```
+if (access("file.txt", F_OK) == -1) {
+    // File does not exist, handle error
+}
+```
+*The F_OK flag is used to check for the existence of the file. 
+You can also use other flags like R_OK, W_OK, and X_OK to check for read, write, and execute permissions, respectively.*
 ## waitpd
 ```
 pid_t pid;
