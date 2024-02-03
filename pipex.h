@@ -6,25 +6,28 @@
 /*   By: vketteni <vketteni@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 16:20:48 by vketteni          #+#    #+#             */
-/*   Updated: 2024/01/30 16:22:13 by vketteni         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_printf.h                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: vketteni <vketteni@student.42berlin.de>    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/07 13:45:09 by vketteni          #+#    #+#             */
-/*   Updated: 2024/01/07 00:54:43 by vketteni         ###   ########.fr       */
+/*   Updated: 2024/02/03 18:31:03 by vketteni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PIPEX_H
 # define PIPEX_H
 
+# include "submodules/libft/libft.h"
+# include <fcntl.h>  
+# include <stdio.h>
+# include <stdlib.h>
+# include <sys/stat.h>
+# include <sys/types.h>
+# include <sys/wait.h>
+# include <unistd.h>
+
+void	execute_command(char *cmd, char *envp[]);
+void	parent_process(int pipe_fd[2], char *argv[], char *envp[]);
+void	child_process(int pipe_fd[2], char *argv[], char *envp[]);
+char	*get_env_all_path(char *envp[]);
+char	*get_path(char *cmd, char *envp[]);
+void	free_string_arr(char **arr);
 
 
 #endif

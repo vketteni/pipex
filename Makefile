@@ -3,7 +3,8 @@ CC=cc
 CFLAGS=-Wall -Wextra -Werror
 
 # Path: srcs
-SRSC = source/pipex.c
+SRSC = pipex.c \
+	utils.c	\
 
 OBJS = $(SRSC:.c=.o)
 %.o: %.c
@@ -11,13 +12,16 @@ OBJS = $(SRSC:.c=.o)
 
 all: $(NAME)
 
-$(NAME): $(OBJS)
-	$(CC) $(CFLAGS) -o $(NAME) $(OBJS)
+${NAME}: ${OBJS}
+	@${MAKE} -C submodules/libft bonus
+	@${CC} ${FLAGS} ${OBJS} -Lsubmodules/libft -lft -o ${NAME}
 
 clean:
+	@${MAKE} clean -C submodules/libft
 	rm -f $(OBJS)
 
 fclean: clean
+	@${MAKE} fclean -C submodules/libft
 	rm -f $(NAME)
 
 re: fclean all
