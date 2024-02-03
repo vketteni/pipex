@@ -6,7 +6,7 @@
 /*   By: vketteni <vketteni@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/03 18:20:56 by vketteni          #+#    #+#             */
-/*   Updated: 2024/02/03 18:30:42 by vketteni         ###   ########.fr       */
+/*   Updated: 2024/02/04 00:38:28 by vketteni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ char	*get_env_all_path(char *envp[])
 	while (envp[i])
 	{
 		if (ft_strncmp("PATH=", envp[i], 5) == 0)
-			return (envp[i + 5]);
+			return (envp[i] + 5);
 		i++;
 	}
 	return (NULL);
@@ -60,7 +60,13 @@ void	free_string_arr(char **arr)
 	int	i;
 
 	i = 0;
-	while(arr[i])
+	while (arr[i])
 		free(arr[i++]);
 	free(arr);
+}
+
+void	msg_error(char *err)
+{
+	perror(err);
+	exit(EXIT_FAILURE);
 }

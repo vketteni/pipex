@@ -1,6 +1,6 @@
 NAME=pipex
 CC=cc
-CFLAGS=-Wall -Wextra -Werror
+FLAGS= -g -Wall -Wextra -Werror
 
 # Path: srcs
 SRSC = pipex.c \
@@ -8,7 +8,7 @@ SRSC = pipex.c \
 
 OBJS = $(SRSC:.c=.o)
 %.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(FLAGS) -c $< -o $@
 
 all: $(NAME)
 

@@ -6,12 +6,11 @@
 /*   By: vketteni <vketteni@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 16:20:39 by vketteni          #+#    #+#             */
-/*   Updated: 2024/02/03 18:22:06 by vketteni         ###   ########.fr       */
+/*   Updated: 2024/02/04 00:38:36 by vketteni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
-
 
 void	execute_command(char *cmd, char *envp[])
 {
@@ -33,42 +32,45 @@ void	parent_process(int pipe_fd[2], char *argv[], char *envp[])
 {
 	int	fd;
 
-	if (access(argv[4], F_OK | W_OK) == 0)
-	{
-		fd = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC);
-		if (fd == -1)
-			exit(-1);
-		dup2(fd, STDOUT_FILENO);
-		dup2(pipe_fd[0], STDIN_FILENO);
-		close(pipe_fd[1]);
-		execute_command(argv[3], envp);
-	}
+	if (access(argv[1], F_OK) == -1)
+		msg_error("Infile missing=-");
+	if (access(argv[1], R_OK) == -1)
+		msg_error("Write access denied.");
+	fd = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC);
+	if (fd == -1)
+		exit(-1);
+	dup2(fd, STDOUT_FILENO);
+	dup2(pipe_fd[0], STDIN_FILENO);
+	close(pipe_fd[1]);
+	execute_command(argv[3], envp);
 }
 
 void	child_process(int pipe_fd[2], char *argv[], char *envp[])
 {
 	int	fd;
 
-	if (access(argv[1], F_OK | R_OK) == 0)
-	{
-		fd = open(argv[1], O_RDONLY);
-		if (fd == -1)
-			exit(-1);
-		dup2(fd, STDIN_FILENO);
-		dup2(pipe_fd[1], STDOUT_FILENO);
-		close(pipe_fd[0]);
-		execute_command(argv[2], envp);
-	}
+	if (access(argv[1], F_OK) == -1)
+		msg_error("Infile missing");
+	if (access(argv[1], R_OK) == -1)
+		msg_error("Read access denied.");
+	fd = open(argv[1], O_RDONLY);
+	if (fd == -1)
+		exit(-1);
+	dup2(fd, STDIN_FILENO);
+	dup2(pipe_fd[1], STDOUT_FILENO);
+	close(pipe_fd[0]);
+	execute_command(argv[2], envp);
 }
 
 int	main(int argc, char *argv[], char *envp[])
 {
 	pid_t	pid;
 	int		pipe_fd[2];
+	int		status;
 
 	if (argc != 5)
 	{
-		ft_putstr_fd("./pipex infile cmd cmd outfile\n", 2);
+		ft_putstr_fd("USAGE: ./pipex <infile> <cmd1> <cmd2> <outfile>\n", 2);
 		exit(-1);
 	}
 	if (pipe(pipe_fd) == -1)
@@ -78,7 +80,8 @@ int	main(int argc, char *argv[], char *envp[])
 		exit(-1);
 	if (pid == 0)
 		child_process(pipe_fd, argv, envp);
-	else
+	waitpid(pid, &status, 0);
+	if (status == 0)
 		parent_process(pipe_fd, argv, envp);
 	return (0);
 }
