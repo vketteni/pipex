@@ -6,7 +6,7 @@
 /*   By: vketteni <vketteni@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 16:20:39 by vketteni          #+#    #+#             */
-/*   Updated: 2024/02/04 19:05:35 by vketteni         ###   ########.fr       */
+/*   Updated: 2024/02/07 18:16:16 by vketteni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	parent_process(int pipe_fd[2], char *argv[], char *envp[])
 		msg_error("Infile missing=-");
 	if (access(argv[1], R_OK) == -1)
 		msg_error("Write access denied.");
-	fd = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC);
+	fd = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
 		exit(-1);
 	dup2(fd, STDOUT_FILENO);
