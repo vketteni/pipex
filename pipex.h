@@ -6,7 +6,7 @@
 /*   By: vketteni <vketteni@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 16:20:48 by vketteni          #+#    #+#             */
-/*   Updated: 2024/02/03 23:48:12 by vketteni         ###   ########.fr       */
+/*   Updated: 2024/02/04 19:09:01 by vketteni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,5 +31,6 @@ char	*get_env_all_path(char *envp[]);
 char	*get_path(char *cmd, char *envp[]);
 void	free_string_arr(char **arr);
 void	msg_error(char *err);
+void	remove_inner_quotes(char **cmd);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: vketteni <vketteni@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 16:20:39 by vketteni          #+#    #+#             */
-/*   Updated: 2024/02/04 00:38:36 by vketteni         ###   ########.fr       */
+/*   Updated: 2024/02/04 19:05:35 by vketteni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ void	execute_command(char *cmd, char *envp[])
 	char	**cmd_split;
 
 	cmd_split = ft_split(cmd, ' ');
+	remove_inner_quotes(cmd_split);
 	path = get_path(cmd_split[0], envp);
 	if (execve(path, cmd_split, envp) == -1)
 	{

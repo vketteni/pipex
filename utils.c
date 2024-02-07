@@ -6,7 +6,7 @@
 /*   By: vketteni <vketteni@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/03 18:20:56 by vketteni          #+#    #+#             */
-/*   Updated: 2024/02/04 00:38:28 by vketteni         ###   ########.fr       */
+/*   Updated: 2024/02/04 19:17:13 by vketteni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,4 +69,16 @@ void	msg_error(char *err)
 {
 	perror(err);
 	exit(EXIT_FAILURE);
+}
+
+void	remove_inner_quotes(char **cmd)
+{
+	int	i;
+
+	i = 0;
+	while (cmd[i] != NULL)
+	{
+		cmd[i] = ft_strtrim(cmd[i], "\'\"");
+		i++;
+	}
 }

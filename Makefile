@@ -1,20 +1,21 @@
 NAME=pipex
 CC=cc
 FLAGS= -g -Wall -Wextra -Werror
-
-# Path: srcs
 SRSC = pipex.c \
 	utils.c	\
-
+	
 OBJS = $(SRSC:.c=.o)
-%.o: %.c
-	$(CC) $(FLAGS) -c $< -o $@
 
 all: $(NAME)
 
-${NAME}: ${OBJS}
-	@${MAKE} -C submodules/libft bonus
+${NAME}: ${OBJS} libft
 	@${CC} ${FLAGS} ${OBJS} -Lsubmodules/libft -lft -o ${NAME}
+
+%.o: %.c
+	$(CC) $(FLAGS) -c $< -o $@
+
+libft:
+	@${MAKE} -C submodules/libft 
 
 clean:
 	@${MAKE} clean -C submodules/libft
