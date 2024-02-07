@@ -6,7 +6,7 @@
 /*   By: vketteni <vketteni@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 16:20:39 by vketteni          #+#    #+#             */
-/*   Updated: 2024/02/07 18:16:16 by vketteni         ###   ########.fr       */
+/*   Updated: 2024/02/07 21:38:56 by vketteni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,17 @@ void	execute_command(char *cmd, char *envp[])
 	cmd_split = ft_split(cmd, ' ');
 	remove_inner_quotes(cmd_split);
 	path = get_path(cmd_split[0], envp);
+	if (path == NULL)
+	{
+		free(path);
+		ft_putstr_fd("pipex: command not found: ", 2);
+		ft_putendl_fd(cmd_split[0], 2);
+		free_string_arr(cmd_split);
+		exit(-1);
+	}
 	if (execve(path, cmd_split, envp) == -1)
 	{
+		free(path);
 		ft_putstr_fd("pipex: command not found: ", 2);
 		ft_putendl_fd(cmd_split[0], 2);
 		free_string_arr(cmd_split);
@@ -81,8 +90,7 @@ int	main(int argc, char *argv[], char *envp[])
 		exit(-1);
 	if (pid == 0)
 		child_process(pipe_fd, argv, envp);
+	parent_process(pipe_fd, argv, envp);
 	waitpid(pid, &status, 0);
-	if (status == 0)
-		parent_process(pipe_fd, argv, envp);
 	return (0);
 }

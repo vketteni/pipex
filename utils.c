@@ -6,7 +6,7 @@
 /*   By: vketteni <vketteni@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/03 18:20:56 by vketteni          #+#    #+#             */
-/*   Updated: 2024/02/04 19:17:13 by vketteni         ###   ########.fr       */
+/*   Updated: 2024/02/07 21:21:08 by vketteni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ char	*get_env_all_path(char *envp[])
 char	*get_path(char *cmd, char *envp[])
 {
 	char	**env_all_path;
-	char	**cmd_split;
 	char	*env_path;
 	char	*executable_path;
 	int		i;
@@ -38,20 +37,19 @@ char	*get_path(char *cmd, char *envp[])
 	if (env_all_path == NULL)
 		return (NULL);
 	i = -1;
-	cmd_split = ft_split(cmd, ' ');
 	while (env_all_path[++i])
 	{
 		env_path = ft_strjoin(env_all_path[i], "/");
-		executable_path = ft_strjoin(env_path, cmd_split[0]);
+		executable_path = ft_strjoin(env_path, cmd);
 		free(env_path);
 		if (access(executable_path, F_OK | X_OK) == 0)
 		{
-			free_string_arr(cmd_split);
+			free_string_arr(env_all_path);
 			return (executable_path);
 		}
+		free(executable_path);
 	}
-	free(executable_path);
-	free_string_arr(cmd_split);
+	free_string_arr(env_all_path);
 	return (NULL);
 }
 
@@ -73,12 +71,15 @@ void	msg_error(char *err)
 
 void	remove_inner_quotes(char **cmd)
 {
-	int	i;
+	int		i;
+	char	*untrimmed;
 
 	i = 0;
 	while (cmd[i] != NULL)
 	{
-		cmd[i] = ft_strtrim(cmd[i], "\'\"");
+		untrimmed = cmd[i];
+		cmd[i] = ft_strtrim(untrimmed, "\'\"");
+		free(untrimmed);
 		i++;
 	}
 }
